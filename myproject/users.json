@@ -1,3 +1,2 @@
-{"username": "john_doe", "email": "john@example.com", "password": "secret_password"}
-{"username": "oleksandr_kolomiiets", "email": "okolomiietskolomiiets@kse.org.ua", "password": "qwerty1234"}
-{"username": "john_doe", "email": "john@example.com", "password": "secret_password"}
+{"id": "9b22653d-f8ff-4c34-a56a-02f73d55f17a", "username": "john_doe", "email": "john@example.com", "password": "secret_password"}
+{"id": "a1c0a6ee-0f0e-4306-ac66-7ae59cf442d7", "username": "oleksandr_kolomiiets", "email": "okolomiietskolomiiets@kse.org.ua", "password": "qwerty12345"}
