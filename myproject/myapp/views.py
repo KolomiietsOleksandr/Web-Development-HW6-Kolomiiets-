@@ -40,7 +40,7 @@ def entity_id(request, entity_id):
     Handle both GET and POST requests for /entity/id endpoint
     """
     if request.method == 'GET':
-        return get_entity_by_id(entity_id)
+        return get_entity_by_id(request, entity_id)
     elif request.method == 'DELETE':
         return delete_entity(entity_id)
     else:
