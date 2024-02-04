@@ -28,11 +28,21 @@ def entity(request):
     Handle both GET and POST requests for /entity/ endpoint
     """
     if request.method == 'GET':
-        print('8')
         return list_entities(request)
     elif request.method == 'POST':
-        print('POST')
         return create_entity(request)
+    else:
+        return HttpResponseBadRequest("Unsupported method")
+
+@csrf_exempt
+def entity_id(request, entity_id):
+    """
+    Handle both GET and POST requests for /entity/id endpoint
+    """
+    if request.method == 'GET':
+        return get_entity_by_id(entity_id)
+    elif request.method == 'DELETE':
+        return delete_entity(entity_id)
     else:
         return HttpResponseBadRequest("Unsupported method")
 
@@ -49,7 +59,7 @@ def create_entity(request):
             password = data.get('password', None)
 
             if username and email and password:
-                entity_id = str(uuid.uuid4())  # Generate a UUID for the entity
+                entity_id = str(uuid.uuid4())
                 entity = {
                     'id': entity_id,
                     'username': username,
@@ -121,3 +131,27 @@ def get_entities_from_json(entity_id):
                 if entity.get('id') == str(entity_id):
                     print('2')
                     return entity
+
+@csrf_exempt
+def delete_entity(entity_id):
+    """
+    Delete an entity by ID
+    """
+    try:
+        file_path = '/Users/zakerden1234/Desktop/Web-Development-HW6-Kolomiiets-/myproject/users.json'
+
+        updated_entities = []
+        with open(file_path, 'r') as f:
+            for line in f:
+                entity = json.loads(line)
+                if entity.get('id') != str(entity_id):
+                    updated_entities.append(entity)
+
+        with open(file_path, 'w') as f:
+            for entity in updated_entities:
+                json.dump(entity, f)
+                f.write('\n')
+
+        return JsonResponse({'message': 'Entity deleted successfully'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

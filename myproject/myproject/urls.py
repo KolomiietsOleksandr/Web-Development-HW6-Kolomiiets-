@@ -1,8 +1,8 @@
 from django.urls import path
-from myapp.views import index, entity, get_entity_by_id
+from myapp.views import index, entity, entity_id
 
 urlpatterns = [
     path('', index, name='index'),
     path('entity/', entity, name='entity'),
-    path('entity/<uuid:entity_id>/', get_entity_by_id, name='get_entity_by_id')
+    path('entity/<uuid:entity_id>/', entity_id, name='entity_by_id')
 ]
