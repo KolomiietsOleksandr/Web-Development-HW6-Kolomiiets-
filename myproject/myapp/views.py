@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
 import json
@@ -19,6 +20,20 @@ def index(request):
         }
     }
     return JsonResponse(endpoints)
+
+@csrf_exempt
+def entity(request):
+    """
+    Handle both GET and POST requests for /entity/ endpoint
+    """
+    if request.method == 'GET':
+        print('8')
+        return list_entities(request)
+    elif request.method == 'POST':
+        print('POST')
+        return create_entity(request)
+    else:
+        return HttpResponseBadRequest("Unsupported method")
 
 @csrf_exempt
 def create_entity(request):
@@ -42,11 +57,10 @@ def create_entity(request):
                 return JsonResponse({'message': 'Entity created successfully'}, status=201)
             else:
                 return JsonResponse({'error': 'Missing parameters'}, status=400)
-        else:
-            return JsonResponse({'error': 'Only POST method allowed'}, status=405)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@csrf_exempt
 def save_entity_to_json(entity):
     """
     Save entity data to a JSON file
@@ -56,3 +70,27 @@ def save_entity_to_json(entity):
     with open(file_path, mode) as f:
         json.dump(entity, f)
         f.write('\n')
+
+@csrf_exempt
+def list_entities(request):
+    """
+    Display a list of entities via GET request
+    """
+    try:
+        if request.method == 'GET':
+            entities = get_entities_from_json()
+            return JsonResponse(entities, safe=False)
+        else:
+            return JsonResponse({'error': 'Only GET method allowed'}, status=405)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def get_entities_from_json():
+    """
+    Fetch entities from a JSON file
+    """
+    with open('/Users/zakerden1234/Desktop/Web-Development-HW6-Kolomiiets-/myproject/users.json') as f:
+     entities = [json.loads(line) for line in f]
+    return entities
+
